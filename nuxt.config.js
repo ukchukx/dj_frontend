@@ -1,3 +1,9 @@
+const pkg = require('./package');
+const excludes = ['vue', 'vuex', 'vue-router', 'nuxt', 'express', 'body-parser', 'request',
+ 'source-map-support'];
+const vendor = Object.keys(pkg.dependencies).filter(k => excludes.indexOf(k) === -1);
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 module.exports = {
   /*
   ** Headers of the page
@@ -20,7 +26,12 @@ module.exports = {
   /*
   ** Build configuration
   */
+  modules: [
+    ['bootstrap-vue/nuxt', { css: false }],
+  ],
   build: {
+    vendor,
+    extractCSS: true,
     /*
     ** Run ESLint on save
     */
@@ -34,5 +45,11 @@ module.exports = {
         })
       }
     }
-  }
+  },
+  plugins: [
+    '~/plugins/form_wizard'
+  ],
+  css: [
+    'vue-form-wizard/dist/vue-form-wizard.min.css'
+  ]
 }
