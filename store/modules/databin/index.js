@@ -12,7 +12,9 @@ const mutations = {
     state.user = user;
   },
   [SAVE_JOURNALS](state, journals) {
-    state.journals = journals;
+     // eslint-disable-next-line no-nested-ternary
+     // eslint-disable-next-line no-confusing-arrow
+    state.journals = journals.sort((a, b) => (a.date < b.date) ? -1 : ((a.date > b.date) ? 1 : 0));
   },
   [SAVE_JOURNAL](state, journal) {
     const idx = state.journals.findIndex(j => j.id === journal.id);

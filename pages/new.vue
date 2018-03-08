@@ -64,7 +64,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-form-checkbox v-model="decision.accomodating">
+          <b-form-checkbox v-model="decision.accommodating">
             Accomodating
           </b-form-checkbox>          
         </b-col>
@@ -232,7 +232,7 @@ export default {
         confident: false,
         tired: false,
         accepting: false,
-        accomodating: false,
+        accommodating: false,
         anxious: false,
         resigned: false,
         frustrated: false,

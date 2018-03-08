@@ -10,7 +10,8 @@
       <b-list-group-item 
         v-for="journal in journals"
         :key="journal.id"
-        href="javascript:;" :class="getListItemClasses(journal)">
+        :href="journal.url" 
+        :class="getListItemClasses(journal)">
         <div class="d-flex w-100 justify-content-between">
           <h5 class="mb-1">{{ journal.index }}</h5>
           <small>Created {{ journal.dateString }}</small>
@@ -36,7 +37,8 @@ export default {
           { 
             canReview: this.canReview(journal),
             dateString: moment(journal.createdAt).fromNow(),
-            reviewDateString: moment(journal.reviewDate).fromNow()
+            reviewDateString: moment(journal.reviewDate).fromNow(),
+            url: `/journal?id=${journal.id}`
           }
         ));
     }
