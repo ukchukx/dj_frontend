@@ -1,5 +1,5 @@
 <template>
-	<b-form inline  @submit.prevent.stop="onSubmit">
+	<b-form inline @submit.prevent.stop="onSubmit">
     <b-input 
     	v-model.trim="form.email" 
     	required 

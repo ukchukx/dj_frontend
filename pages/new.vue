@@ -3,10 +3,11 @@
     <div class="form-pane" v-if="step === 1">
       <b-form-group label="Decision #">
         <b-form-input type="text"
-                      v-model.trim="decision.index"
+                      v-model.trim="index"
                       required
                       placeholder="Decision #">
         </b-form-input>
+        <small v-if="indexUsed">This index has been used</small>
       </b-form-group>
       <b-form-group label="Date">
         <no-ssr>
@@ -20,7 +21,7 @@
       <b-form-group label="Decision">
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.decision"
+            v-model="decision.decision"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -90,18 +91,18 @@
           </b-form-checkbox>          
         </b-col>
         <b-col>
-          <b-form-checkbox v-model="decision.high">
-            High
+          <b-form-checkbox v-model="decision.excited">
+            Excited
           </b-form-checkbox>          
         </b-col>
-      </b-row>      
+      </b-row>
     </div>
     <div class="form-pane" v-if="step === 3">
       <h2>What is the situation or context?</h2>
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.situation"
+            v-model="decision.situation"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -111,7 +112,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.problemStatement"
+            v-model="decision.problemStatement"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -121,7 +122,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.variables"
+            v-model="decision.variables"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -131,7 +132,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.complications"
+            v-model="decision.complications"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -141,7 +142,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.alternatives"
+            v-model="decision.alternatives"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -151,7 +152,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.outcomeRange"
+            v-model="decision.outcomeRange"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -161,7 +162,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.expectations"
+            v-model="decision.expectations"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -171,7 +172,7 @@
       <b-form-group>
         <b-form-textarea type="textarea" 
             :rows="4"
-            v-model.trim="decision.outcome"
+            v-model="decision.outcome"
             required>
         </b-form-textarea>
       </b-form-group>     
@@ -191,10 +192,10 @@
 
 
     <b-row class="mb-3 mt-3">
-      <b-col xs="6">
+      <b-col xs="6" class="text-center">
         <b-button v-if="step !== 1" @click="previous()" size="lg" variant="outline-secondary">Previous</b-button>
       </b-col>
-      <b-col xs="6">
+      <b-col xs="6" class="text-center">
         <b-button v-if="step !== 11" @click="next()" size="lg" variant="outline-secondary">Next</b-button>          
         <b-button v-else @click="save()" size="lg" variant="outline-secondary">Save</b-button>          
       </b-col>
@@ -211,13 +212,16 @@ export default {
   },
   data() {
     const date = new Date();
+    const usedIndexes = this.$store.getters.getJournals.map(({ index }) => index);
 
     return {
       step: 1,
+      usedIndexes,
+      index: usedIndexes.length + 1,
       time: `${date.getHours()}:${date.getMinutes()}`,
       review_time: `${date.getHours()}:${date.getMinutes()}`,
       decision: {
-        index: '1',
+        index: usedIndexes.length + 1,
         date,
         reviewDate: date,
         decision: '',
@@ -232,7 +236,7 @@ export default {
         resigned: false,
         frustrated: false,
         angry: false,
-        high: false,
+        excited: false,
         situation: '',
         problemStatement: '',
         variables: '',
@@ -245,7 +249,15 @@ export default {
       }
     };
   },
+  computed: {
+    indexUsed() {
+      return !!this.usedIndexes.find(idx => idx === this.index);
+    }
+  },
   watch: {
+    index(val) {
+      this.decision.index = val;
+    },
     time(val) {
       const [hours, minutes] = val.split(':');
       this.decision.date.setHours(hours);
@@ -264,10 +276,24 @@ export default {
       this.step = this.step === 1 ? this.step : this.step - 1;
     },
     next() {
+      if (this.indexUsed) {
+        alert('Index has been used'); // eslint-disable-line no-alert
+        return;
+      }
+
       this.step = this.step < 11 ? this.step + 1 : this.step;
     },
     save() {
+      const data = Object.assign({}, this.decision);
+      data.date = data.date.getTime();
+      data.reviewDate = data.reviewDate.getTime();
 
+      this.$store.dispatch('saveJournal', data)
+        .then((result) => {
+          if (result) {
+            this.$router.push('/journals');
+          }
+        });
     }
   }
 };

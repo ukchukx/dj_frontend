@@ -27,22 +27,23 @@ export function authenticate({ commit }, creds) {
     .catch(err => false);
 }
 
-export function saveJournal({ commit }, journal) {
-  if (journal.id.length) { // update
-    this.$axios.post('/journals.updateWhatHappened', journal)
-      .then(({ data }) => {
-        commit(SAVE_JOURNAL, data);
-        return true;
-      })
-      .catch(err => false);
-  } else {
-    this.$axios.post('/journals.create', journal)
+export function saveJournal({ commit, getters }, journal) {
+  if (journal.id && journal.id.length) { // update
+    return this.$axios.post('/journals.updateWhatHappened', journal)
       .then(({ data }) => {
         commit(SAVE_JOURNAL, data);
         return true;
       })
       .catch(err => false);
   }
+  
+  journal.accountId = getters.getUser.id;
+  return this.$axios.post('/journals.create', journal)
+    .then(({ data }) => {
+      commit(SAVE_JOURNAL, data);
+      return true;
+    })
+    .catch(err => false);
 }
 
 export function deleteUser({ commit }) {

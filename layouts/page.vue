@@ -12,7 +12,7 @@
           <b-navbar-nav>
             <b-nav-item :active="currentRoute() === 'new'" href="/new">New journal</b-nav-item>
             <b-nav-item :active="currentRoute() === 'journals'" href="/journals">Journals</b-nav-item>
-            <b-nav-item :active="currentRoute() === 'settings'" href="/settings" disabled>Settings</b-nav-item>
+            <b-nav-item :active="currentRoute() === 'settings'" href="/settings" v-if="false">Settings</b-nav-item>
             <b-nav-item href="javascript:;" @click="signOut()">Sign out</b-nav-item>
           </b-navbar-nav>
         </b-collapse>
