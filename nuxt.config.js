@@ -3,6 +3,7 @@ const excludes = ['vue', 'vuex', 'vue-router', 'nuxt', 'express', 'body-parser',
  'source-map-support'];
 const vendor = Object.keys(pkg.dependencies).filter(k => excludes.indexOf(k) === -1);
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
   /*
@@ -28,6 +29,7 @@ module.exports = {
   */
   modules: [
     ['bootstrap-vue/nuxt', { css: false }],
+    ['@nuxtjs/axios', { baseURL: 'http://localhost:3030', debug: !isProd }],
   ],
   build: {
     vendor,
@@ -47,9 +49,8 @@ module.exports = {
     }
   },
   plugins: [
-    '~/plugins/form_wizard'
+    '~/plugins/axios'
   ],
   css: [
-    'vue-form-wizard/dist/vue-form-wizard.min.css'
   ]
 }

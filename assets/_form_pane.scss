@@ -1,0 +1,13 @@
+.form-pane {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+
+	legend, .custom-checkbox {
+		font-size: 1.5rem;
+	}
+
+	.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #6c757d;
+	}
+}
