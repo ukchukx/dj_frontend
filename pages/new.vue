@@ -212,6 +212,7 @@ export default {
   },
   data() {
     const date = new Date();
+    const reviewDate = new Date();
     const usedIndexes = this.$store.getters.getJournals.map(({ index }) => index);
 
     return {
@@ -219,11 +220,11 @@ export default {
       usedIndexes,
       index: usedIndexes.length + 1,
       time: `${date.getHours()}:${date.getMinutes()}`,
-      review_time: `${date.getHours()}:${date.getMinutes()}`,
+      review_time: `${reviewDate.getHours()}:${reviewDate.getMinutes()}`,
       decision: {
         index: usedIndexes.length + 1,
         date,
-        reviewDate: date,
+        reviewDate,
         decision: '',
         energized: false,
         focused: false,
