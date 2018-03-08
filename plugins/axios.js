@@ -6,4 +6,15 @@ export default function ({ $axios, redirect, store }) {
   });
 
   $axios.onResponse(({ data }) => data);
+
+  $axios.onError(({ response }) => {
+    /* eslint-disable dot-notation */
+    /* eslint-disable radix */
+    const code = parseInt(response && response.status);
+    if (code === 403 && response['message'] === 'Access Denied') { // not authenticated
+      store.dispatch('deleteUser').then(() => {
+        redirect('/');
+      });
+    }
+  });
 }
