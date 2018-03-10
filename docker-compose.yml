@@ -1,0 +1,9 @@
+version: '2'
+services:
+  dj_frontend:
+    image: dj_frontend
+    container_name: dj_frontend
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - "${PWD}/logs:/app/logs"

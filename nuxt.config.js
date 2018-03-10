@@ -4,11 +4,9 @@ const excludes = ['vue', 'vuex', 'vue-router', 'nuxt', 'express', 'body-parser',
 const vendor = Object.keys(pkg.dependencies).filter(k => excludes.indexOf(k) === -1);
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const isProd = process.env.NODE_ENV === 'production';
+const baseURL = isProd ? 'https://dj.moview.com.ng/api' : 'http://localhost:3030';
 
 module.exports = {
-  /*
-  ** Headers of the page
-  */
   head: {
     title: 'Decision Journal',
     meta: [
@@ -20,16 +18,13 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
-  /*
-  ** Customize the progress bar color
-  */
-  loading: { color: '#3B8070' },
+  loading: { color: '#6c757d' },
   /*
   ** Build configuration
   */
   modules: [
     ['bootstrap-vue/nuxt', { css: false }],
-    ['@nuxtjs/axios', { baseURL: 'http://localhost:3030', debug: !isProd }],
+    ['@nuxtjs/axios', { baseURL }],
   ],
   build: {
     vendor,

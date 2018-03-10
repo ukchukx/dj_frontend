@@ -12,8 +12,8 @@ const mutations = {
     state.user = user;
   },
   [SAVE_JOURNALS](state, journals) {
-    // eslint-disable-next-line no-nested-ternary
-    // eslint-disable-next-line no-confusing-arrow
+    /* eslint-disable no-nested-ternary */
+    /* eslint-disable no-confusing-arrow */
     state.journals = journals.sort((a, b) => (a.date < b.date) ? -1 : ((a.date > b.date) ? 1 : 0));
   },
   [SAVE_JOURNAL](state, journal) {
